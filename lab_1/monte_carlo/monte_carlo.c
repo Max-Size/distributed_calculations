@@ -12,7 +12,6 @@ int hits_in_circle = 0;
 
 pthread_mutex_t mutex;
 
-/// Function to get a random number between 0 and 1 
 double get_random_double()
 {
     double random_num = (double)rand() / RAND_MAX;
