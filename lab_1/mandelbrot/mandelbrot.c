@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
+#include "timer.h"
 
 double x_min = -2.0;
 double x_max = 1.0;
@@ -51,8 +52,6 @@ void *routine(void *rank)
     double x_right = x_left + x_range / thread_count;
     double x_step = (x_right - x_left) / local_point_count;
 
-    printf("left: %f, right: %f, local point count: %d\n", x_left, x_right, local_point_count);
-
     double y_range = y_max - y_min;
     double y_step = y_range / local_point_count;
 
@@ -80,6 +79,9 @@ int main(int argc, char const *argv[])
 {
     thread_count = strtol(argv[1], NULL, 10);
     point_count = strtol(argv[2], NULL, 10);
+    
+    double start;
+    GET_TIME(start);
 
     file = fopen("points.csv", "w+");
     fprintf(file, "real, image\n");
@@ -96,6 +98,11 @@ int main(int argc, char const *argv[])
     {
         pthread_join(threads[i], NULL);
     }
+
+    double end;
+    GET_TIME(end);
+
+    printf("Time spent: %f\n", end - start);
 
     fclose(file);
     pthread_mutex_destroy(&mutex);
